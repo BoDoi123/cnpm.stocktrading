@@ -57,15 +57,15 @@ public class StockController {
         return stockTransactionDAO.getStockTransactionsByUser(userId);
     }
 
-    public void buyStock(int userId, int stockId, int quantity, BigDecimal userBalance) {
-        performTransaction(userId, stockId, quantity, userBalance, "BUY");
+    public boolean buyStock(int userId, int stockId, int quantity, BigDecimal userBalance) {
+        return performTransaction(userId, stockId, quantity, userBalance, "BUY");
     }
 
-    public void sellStock(int userId, int stockId, int quantity, BigDecimal userBalance) {
-        performTransaction(userId, stockId, quantity, userBalance, "SELL");
+    public boolean sellStock(int userId, int stockId, int quantity, BigDecimal userBalance) {
+        return performTransaction(userId, stockId, quantity, userBalance, "SELL");
     }
 
-    public void performTransaction(int userId, int stockId, int quantity, BigDecimal userBalance,
+    public boolean performTransaction(int userId, int stockId, int quantity, BigDecimal userBalance,
                                    String transactionType) {
         StockPriceDAO stockPriceDAO = new StockPriceDAO();
         List<StockPrice> stockPrices = stockPriceDAO.getAllStockPrices();
@@ -75,7 +75,7 @@ public class StockController {
         user.setBalance(userBalance);
         if (stock == null || user == null) {
             System.out.println("Không tìm thấy cổ phiếu hoặc người dùng.");
-            return;
+            return false;
         }
         BigDecimal stockPrice = getCurrentPriceForStock(stock.getId(), stockPrices);
         BigDecimal currentPrice = stockPrice.multiply(BigDecimal.valueOf(quantity));
@@ -84,7 +84,7 @@ public class StockController {
                 && quantity > personalStockDAO.getPersonalStockByUserAndStock(userId, stockId).getQuantity())
                 || transactionType.equals("BUY") && quantity > stockPriceDAO.getStockPriceById(stockId).getQuantity()) {
             System.out.println("Giao dịch không thể hoàn thành. Kiểm tra số dư hoặc số lượng cổ phiếu.");
-            return;
+            return false;
         }
 
         // Thực hiện giao dịch
@@ -96,6 +96,7 @@ public class StockController {
         updatePersonalStock(userId, stockId, quantity, transactionType);
         System.out.println("User Balance After Transaction: " + user.getBalance());
         System.out.println("Giao dịch thành công. ID giao dịch: " + transaction.getId());
+        return true;
     }
 
     private StockTransaction createTransaction(int userId, int stockId, int quantity, BigDecimal userBalance,

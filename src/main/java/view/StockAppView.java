@@ -229,7 +229,7 @@ public class StockAppView {
                 JOptionPane.showMessageDialog(frame, "Stock bought successfully!");
                 updateBalanceLabel();
             } else {
-                JOptionPane.showMessageDialog(frame, "Transaction failed. Please check your input and try again.");
+                JOptionPane.showMessageDialog(frame, "Your balance don't have enough to buy.");
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame, "Invalid input. Please enter valid numbers.");
@@ -250,7 +250,7 @@ public class StockAppView {
                 JOptionPane.showMessageDialog(frame, "Stock sold successfully!");
                 updateBalanceLabel();
             } else {
-                JOptionPane.showMessageDialog(frame, "Transaction failed. Please check your input and try again.");
+                JOptionPane.showMessageDialog(frame, "Your stocks don't have enough to sell.");
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame, "Invalid input. Please enter valid numbers.");
