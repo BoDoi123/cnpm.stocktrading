@@ -222,11 +222,15 @@ public class StockAppView {
             int quantity = getQuantityFromUserInput("Enter quantity for buying:");
             BigDecimal userBalance = getUserBalanceFromUserInput();
 
-            // Thực hiện giao dịch mua cổ phiếu
-            stockController.buyStock(userID, stockId, quantity, userBalance);
+            // Check if the transaction is successful
+            boolean transactionSuccessful = stockController.buyStock(userID, stockId, quantity, userBalance);
 
-            JOptionPane.showMessageDialog(frame, "Stock bought successfully!");
-            updateBalanceLabel();
+            if (transactionSuccessful) {
+                JOptionPane.showMessageDialog(frame, "Stock bought successfully!");
+                updateBalanceLabel();
+            } else {
+                JOptionPane.showMessageDialog(frame, "Transaction failed. Please check your input and try again.");
+            }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame, "Invalid input. Please enter valid numbers.");
         }
@@ -239,15 +243,20 @@ public class StockAppView {
             int quantity = getQuantityFromUserInput("Enter quantity for selling:");
             BigDecimal userBalance = getUserBalanceFromUserInput();
 
-            // Thực hiện giao dịch bán cổ phiếu
-            stockController.sellStock(userId, stockId, quantity, userBalance);
+            // Check if the transaction is successful
+            boolean transactionSuccessful = stockController.sellStock(userId, stockId, quantity, userBalance);
 
-            JOptionPane.showMessageDialog(frame, "Stock sold successfully!");
-            updateBalanceLabel();
+            if (transactionSuccessful) {
+                JOptionPane.showMessageDialog(frame, "Stock sold successfully!");
+                updateBalanceLabel();
+            } else {
+                JOptionPane.showMessageDialog(frame, "Transaction failed. Please check your input and try again.");
+            }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame, "Invalid input. Please enter valid numbers.");
         }
     }
+
 
 
     private void updateBalanceLabel() {
